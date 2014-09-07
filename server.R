@@ -44,4 +44,12 @@ shinyServer(function(input, output) {
     add_axis("y", title = "Extent (mill. km²)") %>%
     bind_shiny("ggvis")
 
+  output$explanation <- renderText(paste0(
+    "The lightest band shows the range between the maximum and the minimum ",
+    "daily extents for the period from ", min(plot_df$Year), " to ",
+    maxYear - input$years, ". ",
+    "The darkest band shows the central ", input$percentage,
+    " percent range for the same period. ",
+    "The black line is the median."))
+
 })

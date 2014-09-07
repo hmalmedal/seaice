@@ -18,6 +18,8 @@ shinyUI(fluidPage(
            sliderInput(inputId = "years", label = "Years plotted",
                        value = 2, min = 1, max = 10, step = 1))),
 
+  fluidRow(column(width = 6, textOutput("explanation"))),
+
   a(href = "https://github.com/hmalmedal/seaice", "GitHub")
 
 ))
