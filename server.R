@@ -1,0 +1,47 @@
+source("seaice_approx.R")
+
+library(lubridate)
+plot_df <- seaice_approx %>%
+  tbl_df %>%
+  mutate(Year = year(Date)) %>%
+  arrange(rev(Date))
+year(plot_df$Date) <- 2001
+
+maxYear <- max(plot_df$Year)
+
+library(shiny)
+library(ggvis)
+
+shinyServer(function(input, output) {
+
+  ribbon_df <- reactive(
+    plot_df %>%
+      na.omit %>%
+      filter(Year < maxYear) %>%
+      group_by(Date) %>%
+      summarise(max = max(Extent),
+                min = min(Extent),
+                median = median(Extent),
+                upperquantile = quantile(Extent, 0.5 + input$percentage / 200,
+                                         type = 8),
+                lowerquantile = quantile(Extent, 0.5 - input$percentage / 200,
+                                         type = 8)))
+
+  reactive(
+    plot_df %>%
+      na.omit %>%
+      filter(Year > maxYear - input$years) %>%
+      mutate(Year = as.character(Year))) %>%
+    ggvis(~Date, ~Extent, stroke = ~Year) %>%
+    layer_lines %>%
+    add_data(ribbon_df) %>%
+    layer_ribbons(y = ~max, y2 = ~min, stroke := "black",
+                  opacity := 0.2, strokeOpacity := 0) %>%
+    layer_ribbons(y = ~upperquantile, y2 = ~lowerquantile, stroke := "black",
+                  opacity := 0.2, strokeOpacity := 0) %>%
+    layer_paths(y = ~median, stroke := "black") %>%
+    add_axis("x", title = "", format = "%b") %>%
+    add_axis("y", title = "Extent (mill. km²)") %>%
+    bind_shiny("ggvis")
+
+})
