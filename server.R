@@ -17,7 +17,7 @@ shinyServer(function(input, output) {
   ribbon_df <- reactive(
     plot_df %>%
       na.omit %>%
-      filter(Year < maxYear) %>%
+      filter(Year <= maxYear - input$years) %>%
       group_by(Date) %>%
       summarise(max = max(Extent),
                 min = min(Extent),
