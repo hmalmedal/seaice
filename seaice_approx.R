@@ -10,7 +10,7 @@ names(NH_seaice_extent) <- c("Year", "Month", "Day", "Extent", "Missing",
 library(dplyr, warn.conflicts = F)
 seaice <- NH_seaice_extent %>%
   tbl_df %>%
-  mutate(Date = as.Date(paste(Year, Month, Day, sep = "-"))) %>%
+  mutate(Date = paste(Year, Month, Day, sep = "-") %>% as.Date) %>%
   filter(Date != as.Date("1984-09-14")) %>% # Bad datapoint
   select(Date, Extent)
 
