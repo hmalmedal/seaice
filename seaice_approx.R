@@ -1,13 +1,13 @@
 NH_seaice_extent_final <- read.csv("ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_final.csv",
-                                   header = F, skip = 2)
+                                   header = FALSE, skip = 2)
 NH_seaice_extent_nrt <- read.csv("ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_nrt.csv",
-                                 header = F, skip = 2)
+                                 header = FALSE, skip = 2)
 NH_seaice_extent <- rbind(NH_seaice_extent_final,
                           NH_seaice_extent_nrt)
 names(NH_seaice_extent) <- c("Year", "Month", "Day", "Extent", "Missing",
                              "Source.Data")
 
-library(dplyr, warn.conflicts = F)
+library(dplyr, warn.conflicts = FALSE)
 seaice <- NH_seaice_extent %>%
   tbl_df %>%
   mutate(Date = paste(Year, Month, Day, sep = "-") %>% as.Date) %>%
