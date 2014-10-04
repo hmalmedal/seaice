@@ -3,8 +3,7 @@ source("seaice_approx.R")
 library(lubridate)
 plot_df <- seaice_approx %>%
   tbl_df %>%
-  mutate(Year = year(Date)) %>%
-  arrange(rev(Date))
+  mutate(Year = year(Date))
 year(plot_df$Date) <- 2001
 
 maxYear <- max(plot_df$Year)
@@ -31,7 +30,7 @@ shinyServer(function(input, output) {
     plot_df %>%
       na.omit %>%
       filter(Year > maxYear - input$years) %>%
-      mutate(Year = as.character(Year))) %>%
+      mutate(Year = factor(Year, levels = rev(unique(Year))))) %>%
     ggvis(~Date, ~Extent, stroke = ~Year) %>%
     layer_lines %>%
     add_data(ribbon_df) %>%
