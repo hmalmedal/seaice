@@ -11,7 +11,6 @@ library(dplyr, warn.conflicts = FALSE)
 seaice <- NH_seaice_extent %>%
   tbl_df %>%
   mutate(Date = paste(Year, Month, Day, sep = "-") %>% as.Date) %>%
-  filter(Date != as.Date("1984-09-14")) %>% # Bad datapoint
   select(Date, Extent)
 
 dates <- seq(min(seaice$Date), max(seaice$Date), by = "days")
