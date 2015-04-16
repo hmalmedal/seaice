@@ -9,11 +9,11 @@ names(NH_seaice_extent) <- c("Year", "Month", "Day", "Extent", "Missing",
 
 library(dplyr, warn.conflicts = FALSE)
 seaice <- NH_seaice_extent %>%
-  tbl_df %>%
-  mutate(Date = paste(Year, Month, Day, sep = "-") %>% as.Date) %>%
+  tbl_df() %>%
+  mutate(Date = paste(Year, Month, Day, sep = "-") %>% as.Date()) %>%
   select(Date, Extent)
 
 dates <- seq(min(seaice$Date), max(seaice$Date), by = "days")
 
 seaice_approx <- approx(seaice$Date, seaice$Extent, dates)
-seaice_approx <- data.frame(Date = seaice_approx$x, Extent = seaice_approx$y)
+seaice_approx <- data_frame(Date = seaice_approx$x, Extent = seaice_approx$y)

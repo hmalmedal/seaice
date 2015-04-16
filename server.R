@@ -2,7 +2,6 @@ source("seaice_approx.R")
 
 library(lubridate)
 plot_df <- seaice_approx %>%
-  tbl_df %>%
   mutate(Year = year(Date))
 year(plot_df$Date) <- 2001
 
@@ -15,7 +14,7 @@ shinyServer(function(input, output) {
 
   ribbon_df <- reactive(
     plot_df %>%
-      na.omit %>%
+      na.omit() %>%
       filter(Year <= maxYear - input$years) %>%
       group_by(Date) %>%
       summarise(max = max(Extent),
@@ -28,11 +27,11 @@ shinyServer(function(input, output) {
 
   reactive(
     plot_df %>%
-      na.omit %>%
+      na.omit() %>%
       filter(Year > maxYear - input$years) %>%
       mutate(Year = factor(Year, levels = rev(unique(Year))))) %>%
     ggvis(~Date, ~Extent, stroke = ~Year) %>%
-    layer_lines %>%
+    layer_lines() %>%
     add_data(ribbon_df) %>%
     layer_ribbons(y = ~max, y2 = ~min, stroke := "black",
                   opacity := 0.2, strokeOpacity := 0) %>%
