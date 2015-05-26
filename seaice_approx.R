@@ -13,10 +13,7 @@ NH_seaice_extent_nrt <- "ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/da
 NH_seaice_extent <- rbind(read_seaice(NH_seaice_extent_final),
                           read_seaice(NH_seaice_extent_nrt))
 
-seaice <- NH_seaice_extent %>%
-  select(Date, Extent)
-
-dates <- seq(min(seaice$Date), max(seaice$Date), by = "days")
-
-seaice_approx <- approx(seaice$Date, seaice$Extent, dates)
-seaice_approx <- data_frame(Date = seaice_approx$x, Extent = seaice_approx$y)
+library(magrittr)
+seaice_approx <- NH_seaice_extent %$%
+  approx(Date, Extent, seq(min(Date), max(Date), by = "days")) %$%
+  data_frame(Date = x, Extent = y)
