@@ -1,16 +1,19 @@
-NH_seaice_extent_final <- read.csv("ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_final.csv",
-                                   header = FALSE, skip = 2)
-NH_seaice_extent_nrt <- read.csv("ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_nrt.csv",
-                                 header = FALSE, skip = 2)
-NH_seaice_extent <- rbind(NH_seaice_extent_final,
-                          NH_seaice_extent_nrt)
-names(NH_seaice_extent) <- c("Year", "Month", "Day", "Extent", "Missing",
-                             "Source.Data")
+library(readr)
+library(stringr)
+library(dplyr)
+read_seaice <- function(file)
+  read_csv(file) %>%
+  slice(-1) %>%
+  `names<-`(str_trim(names(.))) %>%
+  mutate_each(funs(str_trim)) %>%
+  mutate(Date = str_c(Year, Month, Day, sep = "-")) %>%
+  type_convert()
+NH_seaice_extent_final <- "ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_final.csv"
+NH_seaice_extent_nrt <- "ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_nrt.csv"
+NH_seaice_extent <- rbind(read_seaice(NH_seaice_extent_final),
+                          read_seaice(NH_seaice_extent_nrt))
 
-library(dplyr, warn.conflicts = FALSE)
 seaice <- NH_seaice_extent %>%
-  tbl_df() %>%
-  mutate(Date = paste(Year, Month, Day, sep = "-") %>% as.Date()) %>%
   select(Date, Extent)
 
 dates <- seq(min(seaice$Date), max(seaice$Date), by = "days")
