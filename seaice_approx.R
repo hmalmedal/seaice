@@ -14,5 +14,6 @@ NH_seaice_extent <- lapply(NH, read_csv,
   mutate(Date = as.Date(str_c(Year, Month, Day, sep = "-")))
 
 seaice_approx <- NH_seaice_extent %$%
-  approx(Date, Extent, seq(min(Date), max(Date), by = "days")) %$%
-  data_frame(Date = x, Extent = y)
+  approx(Date, Extent, seq(min(Date), max(Date), by = "days")) %>%
+  as_data_frame() %>%
+  rename(Date = x, Extent = y)
