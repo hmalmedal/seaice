@@ -10,7 +10,7 @@ shinyUI(
                     label = "Inter-percentile range",
                     value = 50, min = 0, max = 100, step = 1),
         sliderInput(inputId = "years", label = "Years plotted",
-                    value = 2, min = 1, max = 10, step = 1),
+                    value = 1, min = 1, max = 10, step = 1),
         textOutput("explanation"),
         a(href = "https://github.com/hmalmedal/seaice", "GitHub")
       ),
