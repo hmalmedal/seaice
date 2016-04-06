@@ -1,5 +1,4 @@
 library(readr)
-library(stringr)
 library(dplyr)
 import::from(magrittr, "%$%")
 
@@ -11,7 +10,7 @@ NH_seaice_extent <- lapply(NH, read_csv,
                            col_names = c("Year", "Month", "Day", "Extent"),
                            col_types = "nnnn__", skip = 2) %>%
   bind_rows() %>%
-  mutate(Date = as.Date(str_c(Year, Month, Day, sep = "-")))
+  mutate(Date = as.Date(lubridate::make_datetime(Year, Month, Day)))
 
 seaice_approx <- NH_seaice_extent %$%
   approx(Date, Extent, seq(min(Date), max(Date), by = "days")) %>%
