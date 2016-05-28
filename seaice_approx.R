@@ -1,15 +1,15 @@
-library(readr)
 library(dplyr)
+library(purrr)
+library(readr)
 import::from(magrittr, "%$%")
 
 NH_seaice_extent_final <- "ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_final.csv"
 NH_seaice_extent_nrt <- "ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/NH_seaice_extent_nrt.csv"
 NH <- c(NH_seaice_extent_final, NH_seaice_extent_nrt)
 
-NH_seaice_extent <- lapply(NH, read_csv,
+NH_seaice_extent <- map_df(NH, read_csv,
                            col_names = c("Year", "Month", "Day", "Extent"),
                            col_types = "nnnn__", skip = 2) %>%
-  bind_rows() %>%
   mutate(Date = as.Date(lubridate::make_datetime(Year, Month, Day)))
 
 seaice_approx <- NH_seaice_extent %$%
