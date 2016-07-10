@@ -9,7 +9,7 @@ NH <- c(NH_seaice_extent_final, NH_seaice_extent_nrt)
 
 NH_seaice_extent <- map_df(NH, read_csv,
                            col_names = c("Year", "Month", "Day", "Extent"),
-                           col_types = "nnnn__", skip = 2) %>%
+                           col_types = "iiid__", skip = 2) %>%
   mutate(Date = as.Date(lubridate::make_datetime(Year, Month, Day)))
 
 seaice_approx <- NH_seaice_extent %$%
