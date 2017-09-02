@@ -9,5 +9,5 @@ N_seaice_extent <- read_csv("ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/nort
 
 seaice_approx <- N_seaice_extent %$%
   approx(Date, Extent, seq(min(Date), max(Date), by = "days")) %>%
-  as_data_frame() %>%
+  as_tibble() %>%
   rename(Date = x, Extent = y)
