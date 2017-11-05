@@ -2,7 +2,7 @@ library(dplyr)
 library(readr)
 import::from(magrittr, "%$%")
 
-N_seaice_extent <- read_csv("ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/N_seaice_extent_daily_v2.1.csv",
+N_seaice_extent <- read_csv("ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/north/daily/data/N_seaice_extent_daily_v3.0.csv",
                             col_names = c("Year", "Month", "Day", "Extent"),
                             col_types = "iiid__", skip = 2) %>%
   mutate(Date = lubridate::make_date(Year, Month, Day))
