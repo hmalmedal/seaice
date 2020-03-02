@@ -29,7 +29,7 @@ shinyServer(function(input, output) {
     plot_df %>%
       na.omit() %>%
       filter(Year > maxYear - input$years) %>%
-      mutate(Year = forcats::fct_rev(factor(Year)))) %>%
+      mutate(Year = fct_rev(factor(Year)))) %>%
     ggvis(~Date, ~Extent, stroke = ~Year) %>%
     layer_lines() %>%
     add_data(ribbon_df) %>%
