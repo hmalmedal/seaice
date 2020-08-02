@@ -1,4 +1,5 @@
 library(shiny)
+library(lubridate)
 
 ui <- fluidPage(
   titlePanel("Arctic sea ice extent"),
