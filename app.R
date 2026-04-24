@@ -22,7 +22,7 @@ ui <- fluidPage(
 server <- function(input, output) {
   source("seaice_approx.R")
 
-  plot_df <- seaice_approx %>%
+  plot_df <- seaice_approx |>
     mutate(Year = year(Date))
 
   year(plot_df$Date) <- 2001
@@ -30,10 +30,10 @@ server <- function(input, output) {
   maxYear <- max(plot_df$Year)
 
   ribbon_df <- reactive(
-    plot_df %>%
-      na.omit() %>%
-      filter(Year <= maxYear - input$years) %>%
-      group_by(Date) %>%
+    plot_df |>
+      na.omit() |>
+      filter(Year <= maxYear - input$years) |>
+      group_by(Date) |>
       summarise(max = max(Extent),
                 min = min(Extent),
                 median = median(Extent),
@@ -44,10 +44,10 @@ server <- function(input, output) {
                 .groups = "drop"))
 
   output$plot <- renderPlot(
-    plot_df %>%
-      na.omit() %>%
-      filter(Year > maxYear - input$years) %>%
-      mutate(Year = fct_rev(factor(Year))) %>%
+    plot_df |>
+      na.omit() |>
+      filter(Year > maxYear - input$years) |>
+      mutate(Year = fct_rev(factor(Year))) |>
       ggplot(aes(Date)) +
       geom_ribbon(data = ribbon_df(),
                   aes(ymin = min,
